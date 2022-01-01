@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+parameters:
+  serviceConnection: 'AADAZDEVOPSDEV01'
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: ${{ parameters.serviceConnection }}
+    scriptType: ps
+    scriptLocation: inlineScript
+    inlineScript: |
+      az deployment sub create `
+        --location 'australiaeast' `
+        --template-file ./main.bicep `
+        --parameters department='ictb' `
+          location= 'australiaeast' `
+          environment='poc' `
+          application='test' 
